@@ -1,0 +1,50 @@
+Experiment_name: MuiltKernelGTCN_othersGCN
+
+# feeder
+feeder: feeders.feeder.Feeder
+num_workers: 8
+train_feeder_args:
+  data_path: /home1/zqp_workspace/Shift-GCN/data/ntu/xsub/train_data_joint.npy
+  label_path: /home1/zqp_workspace/Shift-GCN/data/ntu/xsub/train_label.pkl
+  # debug: True
+  random_choose: False
+  random_shift: True
+  random_move: False
+  window_size: -1
+  normalization: True
+
+test_feeder_args:
+  data_path: /home1/zqp_workspace/Shift-GCN/data/ntu/xsub/val_data_joint.npy
+  label_path: /home1/zqp_workspace/Shift-GCN/data/ntu/xsub/val_label.pkl
+  # debug: True
+  random_choose: False
+  random_shift: False
+  random_move: False
+  window_size: -1
+  normalization: True
+
+# model
+model: model.model_old.Model
+model_args:
+  graph: 'graph.ntu_rgb_d.Graph'
+  kernel_num: 8
+  edge_weight: True
+  lamda: 1
+  in_channels: 3
+  n_class: 60
+
+#optim
+optim: Adam
+weight_decay: 0.0001
+lr: 0.001
+step: [30, 55, 80, 100]
+
+# training
+phase: train
+debug: False
+device: 0
+only_train_epoch: 1
+warm_up_epoch: 0
+batch_size: 8
+epochs: 140
+nesterov: True

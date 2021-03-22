@@ -1,0 +1,62 @@
+Experiment_name: TR-AR_con_drop
+
+# feeder
+feeder: feeders.feeder.Feeder
+num_workers: 8
+train_feeder_args:
+  data_path: /home1/zqp_workspace/Shift-GCN/data/ntu/xsub/train_data_joint.npy
+  label_path: /home1/zqp_workspace/Shift-GCN/data/ntu/xsub/train_label.pkl
+  # debug: True
+  random_choose: False
+  random_shift: True
+  random_move: True
+  window_size: -1
+  normalization: True
+
+test_feeder_args:
+  data_path: /home1/zqp_workspace/Shift-GCN/data/ntu/xsub/val_data_joint.npy
+  label_path: /home1/zqp_workspace/Shift-GCN/data/ntu/xsub/val_label.pkl
+  # debug: True
+  random_choose: False
+  random_shift: False
+  random_move: False
+  window_size: -1
+  normalization: True
+
+# model
+model: model.TR_GCN_model.Model
+model_args:
+  graph: 'graph.ntu_rgb_d.Graph'
+  kernel_num: 8
+  edge_weight: True
+  lamda: 1
+  input_channel: 3
+  mid_channels: [64, 256]
+  layer_num: 4
+  position_encoding: modules.position_encoding.PositionalEncoding
+  heads: 4
+  encode_size: 256
+  d_ff: 256
+  dropout: 0.3
+  attention_dropout: 0.3
+  position_encoding_dropout: 0.3
+  point_num: 25
+  n_classes: 60
+
+weights: work_dir/TR-AR2021-03-14/save_models/TR-AR-13.pt
+
+#optim
+optim: Adam
+weight_decay: 0.0001
+lr: 0.0001
+step: [55, 80, 100]
+
+# training
+phase: train
+debug: False
+device: [0, 1, 2]
+only_train_epoch: 1
+warm_up_epoch: 5
+batch_size: 32
+epochs: 140
+nesterov: True
